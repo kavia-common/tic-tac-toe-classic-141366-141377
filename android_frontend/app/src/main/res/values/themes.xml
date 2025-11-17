@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Use AppCompat theme to ensure wide availability of widget styles -->
+    <style name="Theme.TicTacToe.OceanProfessional" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorError">@color/error</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+
+        <item name="android:buttonStyle">@style/Widget.TTT.Button</item>
+        <item name="toolbarStyle">@style/Widget.TTT.Toolbar</item>
+    </style>
+
+    <!-- Base styles to avoid referencing Material3-specific widget names -->
+    <style name="Widget.TTT.BaseButton" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/surface</item>
+    </style>
+
+    <style name="Widget.TTT.Button" parent="Widget.TTT.BaseButton">
+        <item name="android:background">@drawable/btn_primary_background</item>
+    </style>
+
+    <style name="Widget.TTT.SecondaryButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/btn_secondary_background</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="Widget.TTT.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/surface</item>
+        <item name="titleTextColor">@color/textPrimary</item>
+        <item name="android:elevation">6dp</item>
+    </style>
+
+    <style name="Widget.TTT.CellButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/cell_background</item>
+        <item name="android:textColor">@color/textPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:minHeight">68dp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+</resources>

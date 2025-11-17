@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Tic Tac Toe</string>
+    <string name="turn_default">Turn: X</string>
+    <string name="turn_label">Turn: %1$s</string>
+    <string name="winner_label">Winner: %1$s</string>
+    <string name="draw_label">It’s a draw</string>
+    <string name="restart">Restart</string>
+    <string name="game_over">Game Over</string>
+    <string name="winner_message">%1$s wins!</string>
+    <string name="board_cleared">Board cleared</string>
+    <string name="restart_cd">Restart game</string>
+    <string name="status_cd">Current game status</string>
+    <string name="cell_content_description">Board cell %1$d</string>
+    <string name="close">Close</string>
+</resources>
