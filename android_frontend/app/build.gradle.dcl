@@ -2,12 +2,13 @@ androidApplication {
     namespace = "org.example.app"
 
     testing {
-        // Ensure JUnit 5 (Jupiter) tests are discovered and do not fail when empty
-        failOnNoDiscoveredTests = false
+        // JUnit 5 dependencies for unit tests
         dependencies {
             implementation("org.junit.jupiter:junit-jupiter:5.10.2")
             runtimeOnly("org.junit.platform:junit-platform-launcher")
         }
+        // Supported declarative DSL flag to not fail when no tests are discovered
+        failOnNoDiscoveredTests = false
     }
 
     dependencies {

@@ -17,7 +17,8 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
         val currentPlayer: Char,
         val gameOver: Boolean,
         val winner: Char?,
-        val outcomeShown: Boolean
+        val outcomeShown: Boolean,
+        val winnerLine: IntArray?
     )
 
     companion object Keys {
@@ -25,6 +26,7 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
         private const val KEY_PLAYER = "player"
         private const val KEY_OVER = "over"
         private const val KEY_WINNER = "winner"
+        private const val KEY_WIN_LINE = "winner_line"
         private const val KEY_OUTCOME_SHOWN = "outcome_shown"
     }
 
@@ -36,7 +38,8 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
             currentPlayer = state.currentPlayer,
             gameOver = state.gameOver,
             winner = state.winner,
-            outcomeShown = savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) ?: false
+            outcomeShown = savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) ?: false,
+            winnerLine = state.winnerLine?.copyOf()
         )
 
     // PUBLIC_INTERFACE
@@ -62,6 +65,7 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
         savedStateHandle[KEY_PLAYER] = state.currentPlayer.toString()
         savedStateHandle[KEY_OVER] = state.gameOver
         savedStateHandle[KEY_WINNER] = state.winner?.toString()
+        savedStateHandle[KEY_WIN_LINE] = state.winnerLine?.joinToString(",")
     }
 
     private fun restoreState(): GameState {
@@ -69,13 +73,19 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
         val playerStr = savedStateHandle.get<String>(KEY_PLAYER)
         val over = savedStateHandle.get<Boolean>(KEY_OVER) ?: false
         val winnerStr = savedStateHandle.get<String>(KEY_WINNER)
+        val winLineStr = savedStateHandle.get<String>(KEY_WIN_LINE)
+
+        val winnerLine = winLineStr?.takeIf { it.isNotBlank() }?.split(",")?.mapNotNull {
+            it.toIntOrNull()
+        }?.toIntArray()
 
         return if (boardStr != null && boardStr.length == 9 && playerStr != null) {
             GameState(
                 board = boardStr.toCharArray(),
                 currentPlayer = playerStr.first(),
                 gameOver = over,
-                winner = winnerStr?.firstOrNull()
+                winner = winnerStr?.firstOrNull(),
+                winnerLine = winnerLine
             )
         } else {
             GameEngine.reset()

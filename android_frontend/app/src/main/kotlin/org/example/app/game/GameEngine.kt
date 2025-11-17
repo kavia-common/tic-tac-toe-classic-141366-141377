@@ -8,7 +8,9 @@ data class GameState(
     val board: CharArray = CharArray(9) { ' ' },
     val currentPlayer: Char = 'X',
     val gameOver: Boolean = false,
-    val winner: Char? = null
+    val winner: Char? = null,
+    // Indices of the winning line if there is a winner; null otherwise
+    val winnerLine: IntArray? = null
 )
 
 /**
@@ -42,27 +44,34 @@ object GameEngine {
         val newBoard = state.board.copyOf()
         newBoard[index] = state.currentPlayer
 
-        val winner = getWinner(newBoard)
+        val winnerLine = getWinnerLine(newBoard)
+        val winner = winnerLine?.let { newBoard[it[0]] }
         val isDraw = winner == null && isDraw(newBoard)
 
         return if (winner != null) {
-            state.copy(board = newBoard, gameOver = true, winner = winner)
+            state.copy(board = newBoard, gameOver = true, winner = winner, winnerLine = winnerLine)
         } else if (isDraw) {
-            state.copy(board = newBoard, gameOver = true, winner = null)
+            state.copy(board = newBoard, gameOver = true, winner = null, winnerLine = null)
         } else {
             val nextPlayer = if (state.currentPlayer == 'X') 'O' else 'X'
-            state.copy(board = newBoard, currentPlayer = nextPlayer)
+            state.copy(board = newBoard, currentPlayer = nextPlayer, winnerLine = null)
         }
     }
 
     // PUBLIC_INTERFACE
     fun getWinner(board: CharArray): Char? {
+        val line = getWinnerLine(board)
+        return line?.let { board[it[0]] }
+    }
+
+    // PUBLIC_INTERFACE
+    fun getWinnerLine(board: CharArray): IntArray? {
         for (line in WIN_LINES) {
             val a = board[line[0]]
             val b = board[line[1]]
             val c = board[line[2]]
             if (a != ' ' && a == b && b == c) {
-                return a
+                return line
             }
         }
         return null
