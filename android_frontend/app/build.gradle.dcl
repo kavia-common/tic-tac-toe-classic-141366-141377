@@ -7,12 +7,7 @@ androidApplication {
             implementation("org.junit.jupiter:junit-jupiter:5.10.2")
             runtimeOnly("org.junit.platform:junit-platform-launcher")
         }
-        // Configure unit test task behavior to not fail when no tests are discovered.
-        options {
-            unitTests {
-                isFailOnNoDiscoveredTests = false
-            }
-        }
+        // Note: The experimental DCL plugin may not support 'options' here; relying on default test options.
     }
 
     dependencies {
@@ -22,4 +17,5 @@ androidApplication {
         implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.6")
         implementation(project(":utilities"))
     }
+
 }
