@@ -7,9 +7,11 @@ androidApplication {
             implementation("org.junit.jupiter:junit-jupiter:5.10.2")
             runtimeOnly("org.junit.platform:junit-platform-launcher")
         }
-        // Ensure build does not fail when no tests are discovered
-        unitTest {
-            failOnNoDiscoveredTests = false
+        // Configure unit test task behavior to not fail when no tests are discovered.
+        options {
+            unitTests {
+                isFailOnNoDiscoveredTests = false
+            }
         }
     }
 

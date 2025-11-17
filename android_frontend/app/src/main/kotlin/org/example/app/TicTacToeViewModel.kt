@@ -38,19 +38,29 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
             currentPlayer = state.currentPlayer,
             gameOver = state.gameOver,
             winner = state.winner,
+            // outcomeShown is persisted independently in SavedStateHandle so dialogs are not reshown after process death.
             outcomeShown = savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) ?: false,
+            // winnerLine is stored in GameState but we also persist a copy in SavedStateHandle to restore highlighting after process death
             winnerLine = state.winnerLine?.copyOf()
         )
 
     // PUBLIC_INTERFACE
     fun onCellTapped(index: Int) {
         state = GameEngine.makeMove(state, index)
+        // If game just ended, ensure outcomeShown defaults to false for the new outcome (so dialog can appear)
+        if (state.gameOver) {
+            // Only set default if not already set by a previous restore/flow
+            if (savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) == null) {
+                savedStateHandle[KEY_OUTCOME_SHOWN] = false
+            }
+        }
         persistState()
     }
 
     // PUBLIC_INTERFACE
     fun onRestart() {
         state = GameEngine.reset()
+        // Reset flags on new game
         savedStateHandle[KEY_OUTCOME_SHOWN] = false
         persistState()
     }
@@ -61,11 +71,17 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
     }
 
     private fun persistState() {
+        // Persist core game state
         savedStateHandle[KEY_BOARD] = String(state.board)
         savedStateHandle[KEY_PLAYER] = state.currentPlayer.toString()
         savedStateHandle[KEY_OVER] = state.gameOver
         savedStateHandle[KEY_WINNER] = state.winner?.toString()
+        // Persist winnerLine and outcomeShown to survive process death and allow UI to re-highlight/avoid re-showing dialog
         savedStateHandle[KEY_WIN_LINE] = state.winnerLine?.joinToString(",")
+        // Ensure outcomeShown has a default value for first run
+        if (savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) == null) {
+            savedStateHandle[KEY_OUTCOME_SHOWN] = false
+        }
     }
 
     private fun restoreState(): GameState {
@@ -75,9 +91,16 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
         val winnerStr = savedStateHandle.get<String>(KEY_WINNER)
         val winLineStr = savedStateHandle.get<String>(KEY_WIN_LINE)
 
-        val winnerLine = winLineStr?.takeIf { it.isNotBlank() }?.split(",")?.mapNotNull {
-            it.toIntOrNull()
-        }?.toIntArray()
+        // Ensure defaults are present on first run
+        if (savedStateHandle.get<Boolean>(KEY_OUTCOME_SHOWN) == null) {
+            savedStateHandle[KEY_OUTCOME_SHOWN] = false
+        }
+
+        val persistedWinnerLine = winLineStr
+            ?.takeIf { it.isNotBlank() }
+            ?.split(",")
+            ?.mapNotNull { it.toIntOrNull() }
+            ?.toIntArray()
 
         return if (boardStr != null && boardStr.length == 9 && playerStr != null) {
             GameState(
@@ -85,9 +108,10 @@ class TicTacToeViewModel(private val savedStateHandle: SavedStateHandle) : ViewM
                 currentPlayer = playerStr.first(),
                 gameOver = over,
                 winner = winnerStr?.firstOrNull(),
-                winnerLine = winnerLine
+                winnerLine = persistedWinnerLine
             )
         } else {
+            // First run / nothing to restore
             GameEngine.reset()
         }
     }

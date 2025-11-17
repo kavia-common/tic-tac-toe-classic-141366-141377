@@ -76,9 +76,11 @@ class MainActivity : ComponentActivity() {
         }
         setFocusOrder()
 
-        // Render initial state
+        // Render initial state without animations to ensure restored winnerLine highlighting applies without pulse
         renderBoard(cellButtons, animateAppearance = false)
         renderStatus(statusText, animateColor = false)
+        // If restored into a gameOver state, ensure outcome dialog logic has a chance to run
+        maybeShowOutcome(root)
 
         // Set click listeners for cells
         cellButtons.forEachIndexed { index, button ->
@@ -108,6 +110,14 @@ class MainActivity : ComponentActivity() {
             })
 
             button.setOnClickListener {
+                // Simple guard against rapid double taps during a single UI frame:
+                // temporarily disable the tapped button until we finish updating state and rendering.
+                if (!button.isEnabled) {
+                    // Already disabled either because it's filled or a previous tap in this frame — ignore
+                    return@setOnClickListener
+                }
+                button.isEnabled = false
+
                 val before = viewModel.uiState
                 viewModel.onCellTapped(index)
                 val after = viewModel.uiState
@@ -121,6 +131,8 @@ class MainActivity : ComponentActivity() {
                     announceForAccessibility(getString(R.string.announce_move, afterChar.toString(), row, col))
                 }
 
+                // Re-render. The renderBoard call will compute proper enable/disable states,
+                // so we don't need to re-enable the button manually here.
                 renderBoard(cellButtons, animateAppearance = true)
                 renderStatus(statusText, animateColor = true)
                 maybeShowOutcome(root)
@@ -196,21 +208,24 @@ class MainActivity : ComponentActivity() {
 
             // Winning highlight styling
             if (winningSet.contains(idx)) {
-                // Increase emphasis via text color and slight scale pulse
+                // Emphasize winning cells. If this is a restored state, the initial render call uses animateAppearance=false,
+                // so we won't pulse on the first draw after restore.
                 btn.setTextColor(ContextCompat.getColor(this, R.color.primary))
-                btn.animate()
-                    .scaleX(1.06f)
-                    .scaleY(1.06f)
-                    .setDuration(160)
-                    .setInterpolator(AccelerateDecelerateInterpolator())
-                    .withEndAction {
-                        btn.animate()
-                            .scaleX(1f)
-                            .scaleY(1f)
-                            .setDuration(140)
-                            .start()
-                    }
-                    .start()
+                if (animateAppearance) {
+                    btn.animate()
+                        .scaleX(1.06f)
+                        .scaleY(1.06f)
+                        .setDuration(160)
+                        .setInterpolator(AccelerateDecelerateInterpolator())
+                        .withEndAction {
+                            btn.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(140)
+                                .start()
+                        }
+                        .start()
+                }
             } else {
                 // Reset non-winning cells to default text color
                 btn.setTextColor(ContextCompat.getColor(this, R.color.textPrimary))
