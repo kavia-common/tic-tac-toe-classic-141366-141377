@@ -18,7 +18,8 @@
         android:rotation="90"
         android:paddingStart="@dimen/spacing_lg"
         android:paddingEnd="@dimen/spacing_lg"
-        android:gravity="center" />
+        android:gravity="center"
+        android:importantForAccessibility="no" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -36,14 +37,16 @@
             android:padding="@dimen/spacing_lg"
             android:layout_margin="@dimen/spacing_lg"
             android:background="@drawable/btn_secondary_background"
-            android:contentDescription="@string/status_cd" />
+            android:contentDescription="@string/status_cd"
+            android:accessibilityLiveRegion="polite" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/boardContainer"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="@dimen/spacing_lg">
+            android:padding="@dimen/spacing_lg"
+            android:importantForAccessibility="no">
 
             <FrameLayout
                 android:id="@+id/boardSquare"

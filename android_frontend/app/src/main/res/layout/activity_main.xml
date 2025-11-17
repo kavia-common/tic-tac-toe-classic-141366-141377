@@ -16,7 +16,8 @@
         android:elevation="6dp"
         android:paddingStart="@dimen/spacing_lg"
         android:paddingEnd="@dimen/spacing_lg"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:importantForAccessibility="no" />
 
     <TextView
         android:id="@+id/statusText"
@@ -28,7 +29,8 @@
         android:padding="@dimen/spacing_lg"
         android:layout_margin="@dimen/spacing_lg"
         android:background="@drawable/btn_secondary_background"
-        android:contentDescription="@string/status_cd" />
+        android:contentDescription="@string/status_cd"
+        android:accessibilityLiveRegion="polite" />
 
     <!-- Responsive board container -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="@dimen/spacing_lg">
+        android:padding="@dimen/spacing_lg"
+        android:importantForAccessibility="no">
 
         <!-- Square board area constrained to width with 1:1 ratio -->
         <FrameLayout

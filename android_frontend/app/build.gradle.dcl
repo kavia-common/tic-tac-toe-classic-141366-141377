@@ -7,8 +7,10 @@ androidApplication {
             implementation("org.junit.jupiter:junit-jupiter:5.10.2")
             runtimeOnly("org.junit.platform:junit-platform-launcher")
         }
-        // Supported declarative DSL flag to not fail when no tests are discovered
-        failOnNoDiscoveredTests = false
+        // Ensure build does not fail when no tests are discovered
+        unitTest {
+            failOnNoDiscoveredTests = false
+        }
     }
 
     dependencies {

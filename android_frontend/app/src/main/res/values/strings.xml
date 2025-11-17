@@ -12,4 +12,21 @@
     <string name="status_cd">Current game status</string>
     <string name="cell_content_description">Board cell %1$d. Double tap to mark.</string>
     <string name="close">Close</string>
+
+    <!-- Accessibility additions -->
+    <string name="announce_move">Placed %1$s at row %2$d, column %3$d</string>
+    <string name="announce_winner">%1$s wins. Game over.</string>
+    <string name="announce_draw">Game over. It’s a draw.</string>
+    <string name="announce_board_cleared">Board cleared. New game started.</string>
+    <string name="restart_cd_hint">Restart game. Starts a new match.</string>
+    <string name="restart_hint">Starts a new match and clears the board.</string>
+    <string name="tts_mark_cell">Mark cell</string>
+
+    <!-- TalkBack friendly cell labels -->
+    <string name="cell_label_enabled">Empty cell. Row %1$d, column %2$d.</string>
+    <string name="cell_cd_enabled">Empty cell. Row %1$d, column %2$d. Double tap to mark.</string>
+    <string name="cell_label_filled">%1$s at row %2$d, column %3$d.</string>
+    <string name="cell_cd_filled">Cell marked %1$s at row %2$d, column %3$d.</string>
+    <string name="cell_label_game_over">Cell. Row %1$d, column %2$d. Game over.</string>
+    <string name="cell_cd_game_over">Game over. Cell at row %1$d, column %2$d is inactive.</string>
 </resources>
