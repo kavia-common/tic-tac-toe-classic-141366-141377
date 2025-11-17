@@ -3,12 +3,10 @@ androidApplication {
 
     testing {
         // Ensure JUnit 5 (Jupiter) tests are discovered and do not fail when empty
-        tasks {
-            withType("Test") {
-                useJUnitPlatform()
-                systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
-                failOnNoDiscoveredTests = false
-            }
+        failOnNoDiscoveredTests = false
+        dependencies {
+            implementation("org.junit.jupiter:junit-jupiter:5.10.2")
+            runtimeOnly("org.junit.platform:junit-platform-launcher")
         }
     }
 
@@ -18,8 +16,5 @@ androidApplication {
         implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
         implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.8.6")
         implementation(project(":utilities"))
-
-        testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     }
 }

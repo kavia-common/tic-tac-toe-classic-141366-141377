@@ -4,6 +4,7 @@
     <dimen name="spacing_md">12dp</dimen>
     <dimen name="spacing_lg">16dp</dimen>
     <dimen name="toolbar_height">56dp</dimen>
+    <!-- cell_size retained for potential min sizing, not directly used in responsive layout -->
     <dimen name="cell_size">90dp</dimen>
     <dimen name="corner_radius_md">12dp</dimen>
     <dimen name="corner_radius_lg">14dp</dimen>

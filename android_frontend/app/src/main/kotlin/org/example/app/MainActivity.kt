@@ -31,8 +31,9 @@ class MainActivity : ComponentActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.topAppBar)
         toolbar.title = getString(R.string.app_name)
-        // For AppCompat Toolbar with ComponentActivity, use setActionBar(android.widget.Toolbar) is not compatible.
-        // Simply leave the title set, or if needed, we could switch to AppCompatActivity. Keeping simple here.
+        toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.textPrimary))
+        toolbar.contentDescription = getString(R.string.app_name)
+        // Using Toolbar directly with ComponentActivity; styling provided by theme (Ocean Professional).
 
         val statusText = findViewById<TextView>(R.id.statusText)
         val restartBtn = findViewById<Button>(R.id.restartButton)
